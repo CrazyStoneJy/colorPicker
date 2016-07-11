@@ -1,4 +1,5 @@
 
+import com.sun.xml.internal.ws.api.model.MEP;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -10,8 +11,12 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -36,6 +41,19 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         //初始化stage
+        FlowPane menuPane = new FlowPane(Orientation.HORIZONTAL);
+        MenuBar menuBar = new MenuBar();
+        Menu fileMenu = new Menu("File");
+        Menu settingMenu = new Menu("Setting");
+        Menu helpMneu = new Menu("Help");
+        MenuItem helpItem1 = new MenuItem("Operation");
+        MenuItem helpItem2 = new MenuItem("AboutUs");
+        helpMneu.getItems().addAll(helpItem1,helpItem2);
+        menuBar.getMenus().addAll(fileMenu,settingMenu,helpMneu);
+        menuBar.setPrefWidth(200);
+        menuPane.getChildren().add(menuBar);
+
+        FlowPane centerPane = new FlowPane(Orientation.HORIZONTAL);
         Rectangle colorRect = new Rectangle(100, 50, 100, 60);
         TextField colorNumber = new TextField("----");
         Label colorLabel = new Label("--");
@@ -52,14 +70,12 @@ public class Main extends Application {
             }
         });
 
+
         FlowPane pane = new FlowPane(Orientation.VERTICAL);
         pane.setVgap(10);
         ObservableList<Node> list = pane.getChildren();
-        list.add(colorRect);
-        list.add(comboBox);
-        list.addAll(colorLabel);
-        list.add(colorNumber);
-        Scene scene = new Scene(pane, 300, 300);
+        list.addAll(menuPane,colorRect,comboBox,colorLabel,colorNumber);
+        Scene scene = new Scene(pane, 200, 200);
         primaryStage.setTitle("colorPicker");
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -75,6 +91,8 @@ public class Main extends Application {
         });
         //不加这句话keybroad无效
         colorNumber.requestFocus();
+
+        primaryStage.setResizable(false);
     }
 
     /**
